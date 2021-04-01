@@ -97,7 +97,7 @@ export default class Loja extends Component {
 					</View>
 					<LojaFechada aberto={this.state.loja.Aberto}/>
 					<View>
-						{ this.state.loja.Grupos.map( (item) => (<LojaGrupo key={item.Id} grupo={item}/>) ) } 
+						{ this.state.loja.Grupos.map( (item) => (<LojaGrupo navigation={this.props.navigation} key={item.Id} grupo={item}/>) ) } 
 					</View>
 				</ScrollView>
 			</View>

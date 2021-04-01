@@ -11,7 +11,7 @@ export default class LojaGrupo extends Component {
 			<View style={estilos.principal}>
 				<Text style={estilos.titulo}>{this.props.grupo.Nome}</Text>
 				<View>
-					{ this.props.grupo.Itens.map( (item) => (<LojaGrupoItem key={item.Id} produto={item} />) ) }
+					{ this.props.grupo.Itens.map( (item) => (<LojaGrupoItem navigation={this.props.navigation} key={item.Id} produto={item} />) ) }
 				</View>
 			</View>
 		);

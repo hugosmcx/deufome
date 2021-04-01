@@ -10,6 +10,7 @@ import AlterarLocalizacao from './deufomesrc/componentes/AlterarLocalizacao';
 import Shopping from './deufomesrc/componentes/Shopping';
 import Loja from './deufomesrc/componentes/Loja';
 import LojaInfo from './deufomesrc/componentes/LojaInfo';
+import LojaProduto from './deufomesrc/componentes/LojaProduto';
 import { EstiloIndex as estilos } from './deufomesrc/estilos/esIndex';
 
 const Stack = createStackNavigator();
@@ -241,6 +242,7 @@ class AppDeuFome extends Component {
 					<Stack.Screen name="AlterarLocalizacao" component={AlterarLocalizacao} />
 					<Stack.Screen name="Loja" component={Loja} initialParams={ {loja_id : 0} } />
 					<Stack.Screen name="LojaInfo" component={LojaInfo} initialParams={ {loja_id : 0} } />
+					<Stack.Screen name="LojaProduto" component={LojaProduto} initialParams={ {produto_id : 0} } />
 				</Stack.Navigator>
 			</NavigationContainer>
 		);
