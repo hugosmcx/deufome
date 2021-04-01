@@ -20,11 +20,11 @@ export const EstiloLojaInfoAvaliacao = StyleSheet.create({
 	},
 	texto: {
 		fontSize: 16,
-		color: '#000'
+		color: '#333'
 	},
 	data: {
 		fontSize: 15,
-		color: '#333',
+		color: '#000',
 		fontStyle: 'italic'
 	}
 });

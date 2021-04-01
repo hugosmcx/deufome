@@ -51,7 +51,6 @@ export default class Loja extends Component {
       		.then((response) => response.json())
     		.then((obj) => {
 				if(obj.Status == "OK"){
-					console.log(obj.Result);
 					this.setState({ loja : obj.Result});
 				}else{
 					Alert.alert('Falha ao obter dados da loja');

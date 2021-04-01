@@ -20,7 +20,7 @@ export const EstiloLojaInfo = StyleSheet.create({
 		flexDirection: 'row'
 	},
 	lista_tab_chave: {
-		width: 40
+		width: 65
 	},
 	lista_tab_valor: {
 		color: '#fa5035'
