@@ -18,7 +18,7 @@ export const EstiloLojaProduto = StyleSheet.create({
 		color: '#000'
 	},
 	texto_padrao: {
-		fontSize: 14,
+		fontSize: 16,
 		color: '#000'
 	},
 	texto_destaque: {
@@ -59,10 +59,18 @@ export const EstiloLojaProduto = StyleSheet.create({
 		borderBottomWidth: 1,
 		borderBottomColor: '#ccc',
 		marginBottom: 5,
-		padding: 2
+		padding: 5
 	},
 	grupoSubItemTitulo:{
 		flex: 1
+	},
+	grupoSubItemProduto: {
+		fontSize: 20,
+		color: '#000'
+	},
+	grupoSubItemProdutoPreco: {
+		fontSize: 15,
+		color: '#000'
 	},
 	grupoSubItemBotoes:{
 		flexDirection: 'row',
@@ -72,28 +80,51 @@ export const EstiloLojaProduto = StyleSheet.create({
 		backgroundColor: '#f00',
 		marginHorizontal: 5,
 		borderRadius: 25,
-		width: 25,
-		height: 25,
+		width: 40,
+		height: 40,
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
 	grupoSubItemBotaoTexto: {
 		color: '#fff',
-		fontSize: 15,
+		fontSize: 20,
 		fontWeight: 'bold'
 	},
+	grupoSubItemInfoTexto: {
+		fontSize: 20,
+		color: '#000'
+	},
 	grupoFinalizar: {
-		paddingVertical: 5
+		paddingVertical: 5,
+		borderTopWidth: 1,
+		borderTopColor: '#ccc'
 	},
 	botaoFinalizar: {
-		backgroundColor: '#f00',
+		backgroundColor: '#fff',
+		borderColor: '#f00',
+		borderWidth: 1,
 		margin: 5,
 		borderRadius: 5,
-		padding: 5
+		padding: 5,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center'
 	},
 	textoBotaoFinalizar: {
 		textAlign: 'center',
-		color: '#fff',
+		color: '#000',
 		fontSize: 25
+	},
+	imagemBotaoFinalizar: {
+		width: 30,
+		height: 30,
+		marginLeft: 10
+	},
+	textoFinalizar: {
+		padding: 10
+	},
+	textoValorFinalizar: {
+		fontSize: 30,
+		color: '#f00'
 	}
 });

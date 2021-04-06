@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, Image, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 
 import { DF_BASE_URL } from './DeuFome';
@@ -130,6 +130,34 @@ export default class LojaProduto extends Component {
 		}
 	}
 
+	por_na_sacola(){
+		var dados = this.state.dados;
+		var tem_revisao = false;
+
+		for(var i = 0; i < dados.Complementos.length; i++){
+			var qtd = 0;
+			for(var j = 0; j < dados.Complementos[i].Itens.length; j++){
+				qtd += dados.Complementos[i].Itens[j].Quantidade;
+			}
+
+			if(dados.Complementos[i].Obrigatorio == 1 && qtd <= 0){
+				tem_revisao = true;
+			}
+
+			if(dados.Complementos[i].Obrigatorio == 1 && qtd < dados.Complementos[i].Minimo){
+				tem_revisao = true;
+			}
+
+			if(qtd > dados.Complementos[i].Maximo){
+				tem_revisao = true;
+			}
+		}
+
+		if(tem_revisao){
+			Alert.alert("Revise as opções do produto antes de pôr na sacola");
+		}
+	}
+
 	render(){
 		return (
 			<View style={estilos.principal}>
@@ -162,8 +190,8 @@ export default class LojaProduto extends Component {
 											com.Itens.map( subitem => (
 													<View key={subitem.Id} style={estilos.grupoSubItem}>
 														<View style={estilos.grupoSubItemTitulo}>
-															<Text>{subitem.Nome}</Text>
-															<Text>R${subitem.Preco.toFixed(2)}</Text>
+															<Text style={estilos.grupoSubItemProduto}>{subitem.Nome}</Text>
+															<Text style={estilos.grupoSubItemProdutoPreco}>R${subitem.Preco.toFixed(2)}</Text>
 														</View>
 														<View style={estilos.grupoSubItemBotoes}>
 															<View>
@@ -172,7 +200,7 @@ export default class LojaProduto extends Component {
 																</TouchableOpacity>
 															</View>
 															<View>
-																<Text>{subitem.Quantidade + '/' + com.Maximo}</Text>
+																<Text style={estilos.grupoSubItemInfoTexto}>{subitem.Quantidade + '/' + com.Maximo}</Text>
 															</View>
 															<View>
 																<TouchableOpacity style={estilos.grupoSubItemBotao} onPress={ () => this.incrementaItem(com.Id, subitem.Id)}>
@@ -191,8 +219,12 @@ export default class LojaProduto extends Component {
 					</View>
 				</ScrollView>
 				<View style={estilos.grupoFinalizar}>
-					<TouchableOpacity style={estilos.botaoFinalizar}>
-						<Text style={estilos.textoBotaoFinalizar}>Total R${this.state.ValorFinal.toFixed(2)}</Text>
+					<View style={estilos.textoFinalizar}>
+						<Text style={estilos.textoValorFinalizar}>Total R${this.state.ValorFinal.toFixed(2)}</Text>
+					</View>
+					<TouchableOpacity style={estilos.botaoFinalizar} onPress={ () => this.por_na_sacola()}>
+						<Text style={estilos.textoBotaoFinalizar}>Pôr na Sacola</Text>
+						<Image style={estilos.imagemBotaoFinalizar} source={require('../imagens/bag.png')}/>
 					</TouchableOpacity>
 				</View>
 			</View>
