@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ScrollView } from 'react-native';
+import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 
 import { DF_BASE_URL } from './DeuFome';
@@ -7,6 +7,8 @@ import BarraVoltar from './BarraVoltar';
 import { EstiloLojaProduto as estilos } from '../estilos/esLojaProduto';
 
 export default class LojaProduto extends Component {
+
+	cesta = [];
 
 	constructor(props){
 		super(props);
@@ -18,7 +20,8 @@ export default class LojaProduto extends Component {
 				Descricao: '',
 				Preco: 0.0,
 				Complementos: []
-			}
+			},
+			ValorFinal: 0.0
 		};
 	}
 
@@ -38,6 +41,7 @@ export default class LojaProduto extends Component {
     		.then((obj) => {
 				if(obj.Status == "OK"){
 					this.setState({ dados : obj.Result});
+					this.calcular_total();
 				}else{
 					Alert.alert('Falha ao obter dados da loja');
 				}
@@ -49,10 +53,81 @@ export default class LojaProduto extends Component {
 		.catch((erro) => { console.log(erro) });
 	}
 
-	retorna_item_grupo(grupo){
-		return (
-			<Text>{grupo.Itens[0].Nome}</Text>
-		);
+	calcular_total(){
+		var dados = this.state.dados;
+		var valor_final = 0.0;
+		valor_final += dados.Preco;
+		for(var i = 0; i < dados.Complementos.length; i++){
+			for(var j = 0; j < dados.Complementos[i].Itens.length; j++){
+				valor_final += dados.Complementos[i].Itens[j].Quantidade * dados.Complementos[i].Itens[j].Preco;
+			}
+		}
+		this.setState({ValorFinal : valor_final});
+	}
+
+	decrementaItem(grupo, item){
+		var index_grupo = -1;
+		var index_item = -1;
+		var dados = this.state.dados;
+
+		for(var i = 0; i < dados.Complementos.length; i++){
+			if(dados.Complementos[i].Id == grupo){
+				index_grupo = i;
+				break;
+			}
+		}
+
+		for(var i = 0; i < dados.Complementos[index_grupo].Itens.length; i++){
+			if(dados.Complementos[index_grupo].Itens[i].Id == item){
+				index_item = i;
+				break;
+			}
+		}
+
+		if(dados.Complementos[index_grupo].Itens[index_item].Quantidade > 0){
+			dados.Complementos[index_grupo].Itens[index_item].Quantidade--;
+			this.setState({dados : dados});
+			this.calcular_total();
+		}
+	}
+
+	incrementaItem(grupo, item){
+		var index_grupo = -1;
+		var index_item = -1;
+		var quantidade_total = 0;
+		var dados = this.state.dados;
+
+		for(var i = 0; i < dados.Complementos.length; i++){
+			if(dados.Complementos[i].Id == grupo){
+				index_grupo = i;
+				break;
+			}
+		}
+
+		for(var i = 0; i < dados.Complementos[index_grupo].Itens.length; i++){
+			if(dados.Complementos[index_grupo].Itens[i].Id == item){
+				index_item = i;
+				break;
+			}
+		}
+
+		for(var i = 0; i < dados.Complementos[index_grupo].Itens.length; i++){
+			quantidade_total += dados.Complementos[index_grupo].Itens[i].Quantidade;
+		}
+
+		if(dados.Complementos[index_grupo].Maximo > quantidade_total){
+			dados.Complementos[index_grupo].Itens[index_item].Quantidade++;
+			this.setState({dados : dados});
+			this.calcular_total();
+		}
+	}
+
+	ehObrigatirio(eh){
+		if(eh == 1){
+			return (<Text style={estilos.complementoInfoItem}>Obrigatório</Text>);
+		}else{
+			return (<Text style={estilos.complementoInfoItem}>Opcional</Text>);
+		}
 	}
 
 	render(){
@@ -70,15 +145,56 @@ export default class LojaProduto extends Component {
 					</View>
 					<View style={estilos.grupo}>
 						{
-							this.state.dados.Complementos.map( (com) => (
-								<View key={com.Id}>
-									<Text>{com.Nome}</Text>
-									{ this.retorna_item_grupo(com) }
+							this.state.dados.Complementos.map( com => (
+								<View key={com.Id} style={estilos.complemento}>
+									<View style={estilos.complementoTitulo}>
+										<View>
+											<Text style={estilos.complementoNome}>{com.Nome}</Text>
+										</View>
+										<View style={estilos.complementoInfo}>
+											<Text style={estilos.complementoInfoItem}>{this.ehObrigatirio(com.Obrigatorio)}</Text>
+											<Text style={estilos.complementoInfoItem}>Min {com.Minimo}</Text>
+											<Text style={estilos.complementoInfoItem}>Máx {com.Maximo}</Text>
+										</View>
+									</View>
+									<View>
+										{
+											com.Itens.map( subitem => (
+													<View key={subitem.Id} style={estilos.grupoSubItem}>
+														<View style={estilos.grupoSubItemTitulo}>
+															<Text>{subitem.Nome}</Text>
+															<Text>R${subitem.Preco.toFixed(2)}</Text>
+														</View>
+														<View style={estilos.grupoSubItemBotoes}>
+															<View>
+																<TouchableOpacity style={estilos.grupoSubItemBotao} onPress={ () => this.decrementaItem(com.Id, subitem.Id)}>
+																	<Text style={estilos.grupoSubItemBotaoTexto}>-</Text>
+																</TouchableOpacity>
+															</View>
+															<View>
+																<Text>{subitem.Quantidade + '/' + com.Maximo}</Text>
+															</View>
+															<View>
+																<TouchableOpacity style={estilos.grupoSubItemBotao} onPress={ () => this.incrementaItem(com.Id, subitem.Id)}>
+																	<Text style={estilos.grupoSubItemBotaoTexto}>+</Text>
+																</TouchableOpacity>
+															</View>
+														</View>
+													</View>
+												)
+											)
+										}
+									</View>
 								</View>
 							) )
 						}
 					</View>
 				</ScrollView>
+				<View style={estilos.grupoFinalizar}>
+					<TouchableOpacity style={estilos.botaoFinalizar}>
+						<Text style={estilos.textoBotaoFinalizar}>Total R${this.state.ValorFinal.toFixed(2)}</Text>
+					</TouchableOpacity>
+				</View>
 			</View>
 		);
 	}

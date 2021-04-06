@@ -32,7 +32,8 @@ export default class AlterarLocalizacao extends Component {
 			margin: 2,
 			padding: 5,
 			fontSize: 16,
-			color: '#000'
+			color: '#000',
+			borderWidth: 0
 		},
 		imagem: {
 			width: 30,
