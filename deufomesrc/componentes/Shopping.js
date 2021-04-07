@@ -6,6 +6,7 @@ import ShoppingLocalizacao from './ShoppingLocalizacao';
 import ShoppingTela from './ShoppingTela';
 import ShoppingFooterMenu from './ShoppingFooterMenu';
 import { DF_BASE_URL } from './DeuFome'; 
+import CestaNot from './CestaNot';
 
 export default class Shopping extends Component {
 
@@ -90,6 +91,7 @@ export default class Shopping extends Component {
 						<ShoppingTela cardapio={this.state.cardapio} navigation={this.props.navigation}/>
 					</ScrollView>
 				</View>
+				<CestaNot navigation={this.props.navigation}/>
 				<ShoppingFooterMenu/>
 			</View>
 		);

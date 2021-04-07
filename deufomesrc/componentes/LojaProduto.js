@@ -4,6 +4,7 @@ import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 
 import { DF_BASE_URL } from './DeuFome';
 import BarraVoltar from './BarraVoltar';
+import CestaNot from './CestaNot';
 import { EstiloLojaProduto as estilos } from '../estilos/esLojaProduto';
 
 export default class LojaProduto extends Component {
@@ -155,6 +156,30 @@ export default class LojaProduto extends Component {
 
 		if(tem_revisao){
 			Alert.alert("Revise as opções do produto antes de pôr na sacola");
+		}else{
+			RNSecureStorage.get("biscoito")
+			.then((biscoito) => {
+				var fd = new FormData();
+				fd.append('cookie', biscoito);
+				console.log(JSON.stringify(this.state.dados));
+				fd.append('produto', JSON.stringify(this.state.dados));
+
+				fetch(DF_BASE_URL + 'api/cesta-add.php', {method : 'POST', body : fd})
+				.then((response) => response.json())
+				.then((obj) => {
+					console.log(obj);
+					if(obj.Status == "OK"){
+						this.props.navigation.navigate('Cesta');
+					}else{
+						Alert.alert('Falha ao obter dados da loja');
+					}
+				})
+				.catch((erro) => {
+					console.log(erro);
+					Alert.alert('Serviço Indisponível');
+				});
+			})
+			.catch((erro) => { console.log(erro) })
 		}
 	}
 
@@ -227,6 +252,7 @@ export default class LojaProduto extends Component {
 						<Image style={estilos.imagemBotaoFinalizar} source={require('../imagens/bag.png')}/>
 					</TouchableOpacity>
 				</View>
+				<CestaNot navigation={this.props.navigation}/>
 			</View>
 		);
 	}

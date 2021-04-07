@@ -28,7 +28,7 @@ export default class ShoppingLocalizacao extends Component {
 		},
 		texto2: {
 			fontSize: 15,
-			color: '#0090FF'
+			color: '#F00'
 		}
 	});
 

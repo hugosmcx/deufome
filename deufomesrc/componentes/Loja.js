@@ -8,6 +8,7 @@ import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 import BarraVoltar from './BarraVoltar';
 import LojaGrupo from './LojaGrupo';
 import LojaFechada from './LojaFechada';
+import CestaNot from './CestaNot';
 
 export default class Loja extends Component {
 
@@ -100,6 +101,7 @@ export default class Loja extends Component {
 						{ this.state.loja.Grupos.map( (item) => (<LojaGrupo navigation={this.props.navigation} key={item.Id} grupo={item}/>) ) } 
 					</View>
 				</ScrollView>
+				<CestaNot navigation={this.props.navigation}/>
 			</View>
 		);
 	}
