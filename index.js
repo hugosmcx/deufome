@@ -239,12 +239,12 @@ class AppDeuFome extends Component {
 		return (
 			<NavigationContainer>
 				<Stack.Navigator screenOptions={{headerShown: false}}>
-					<Stack.Screen name="Shopping" component={Shopping} initialParams={ { estado_novo : ""} }/>
+					<Stack.Screen name="Shopping" component={Shopping} initialParams={ { rd_param : Date.now(), estado_novo : ""} }/>
 					<Stack.Screen name="AlterarLocalizacao" component={AlterarLocalizacao} />
-					<Stack.Screen name="Loja" component={Loja} initialParams={ {loja_id : 0} } />
-					<Stack.Screen name="LojaInfo" component={LojaInfo} initialParams={ {loja_id : 0} } />
-					<Stack.Screen name="LojaProduto" component={LojaProduto} initialParams={ {produto_id : 0} } />
-					<Stack.Screen name="Cesta" component={Cesta} />
+					<Stack.Screen name="Loja" component={Loja} initialParams={ { rd_param : Date.now(), loja_id : 0} } />
+					<Stack.Screen name="LojaInfo" component={LojaInfo} initialParams={ { rd_param : Date.now(), loja_id : 0} } />
+					<Stack.Screen name="LojaProduto" component={LojaProduto} initialParams={ {rd_param : Date.now(), produto_id : 0} } />
+					<Stack.Screen name="Cesta" component={Cesta} initialParams={ {rd_param : Date.now()} } />
 				</Stack.Navigator>
 			</NavigationContainer>
 		);

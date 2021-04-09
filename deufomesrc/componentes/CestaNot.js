@@ -36,7 +36,7 @@ export default class CestaNot extends Component {
 		if(this.state.Quantidade == 1){
 			return (
 				<View style={estilos.principal}>
-					<TouchableOpacity style={estilos.botao}>
+					<TouchableOpacity style={estilos.botao}  onPress={() => this.props.navigation.navigate('Cesta')}>
 						<Text style={estilos.texto}>1 item - ver sacola</Text>
 					</TouchableOpacity>
 				</View>

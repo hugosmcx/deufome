@@ -167,7 +167,6 @@ export default class LojaProduto extends Component {
 				fetch(DF_BASE_URL + 'api/cesta-add.php', {method : 'POST', body : fd})
 				.then((response) => response.json())
 				.then((obj) => {
-					console.log(obj);
 					if(obj.Status == "OK"){
 						this.props.navigation.navigate('Cesta');
 					}else{
