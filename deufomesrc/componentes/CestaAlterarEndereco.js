@@ -12,7 +12,7 @@ export default class CestaAlterarEndereco extends Component {
 	constructor(props){
 		super(props);
 
-		this.state = {endereco : '', numero : '', bairro : '', cep : '', celular : ''};
+		this.state = {endereco : '', numero : '', bairro : '', cep : '', celular : '', estadoBotao : {enabled: false}};
 	}
 
 	componentDidMount(){
@@ -29,7 +29,7 @@ export default class CestaAlterarEndereco extends Component {
       		.then((response) => response.json())
     		.then((obj) => {
 				if(obj.Status == "OK"){
-					this.setState({ endereco : obj.Result.Endereco, numero : obj.Result.Numero, bairro : obj.Result.Bairro, cep : obj.Result.Cep, celular : obj.Result.Celular });
+					this.setState({ endereco : obj.Result.Endereco, numero : obj.Result.Numero, bairro : obj.Result.Bairro, cep : obj.Result.Cep, celular : obj.Result.Celular, estadoBotao: {enabled: true} });
 				}else{
 					Alert.alert('Falha ao obter dados da loja');
 				}
@@ -58,6 +58,7 @@ export default class CestaAlterarEndereco extends Component {
 	}
 
 	post_endereco(){
+		this.setState({estadoTela : 0});
 		RNSecureStorage.get("biscoito")
 		.then((biscoito) => {
 			var fd = new FormData();
@@ -107,7 +108,7 @@ export default class CestaAlterarEndereco extends Component {
 				</View>
 				</ScrollView>
 				<View style={{borderTopWidth: 1, borderTopColor: '#ccc'}}>
-					<TouchableOpacity style={{margin: 5, borderWidth: 1, borderColor: '#f00', backgroundColor: '#f00', padding: 5, borderRadius: 5}} onPress={ () => this.salvar_endereco()}>
+					<TouchableOpacity style={[{margin: 5, borderWidth: 1, borderColor: '#f00', backgroundColor: '#f00', padding: 5, borderRadius: 5}, this.state.estadoBotao]} onPress={ () => this.salvar_endereco()}>
 						<Text style={{color: '#fff', fontSize: 20, textAlign: 'center'}}>Salvar e Continuar</Text>
 					</TouchableOpacity>
 				</View>

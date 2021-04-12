@@ -7,6 +7,7 @@ import { DF_BASE_URL } from './DeuFome';
 
 import { EstiloCesta as estilos } from '../estilos/esCesta';
 import BarraVoltar from './BarraVoltar';
+import ShoppingFooterMenu from './ShoppingFooterMenu';
 
 export default class Cesta extends Component {
 
@@ -105,16 +106,16 @@ export default class Cesta extends Component {
 								</View>
 							) )
 						}
-					</ScrollView>
-				</View>
-				<View style={{borderTopWidth: 1, borderTopColor: '#ccc'}}>
-					<View style={{borderWidth: 1, borderColor: '#f00', margin: 5}}>
-						<TouchableOpacity onPress={ () => this.props.navigation.navigate("CestaAlterarEndereco", { rd_param: Math.random(0) })}>
-							<Text style={{padding: 5, backgroundColor: '#eee', color: '#000', fontSize: 18}}>Endereço de Entrega:</Text>
+						<View>
+						<TouchableOpacity style={{borderWidth: 1, borderColor: '#f00', margin: 5, overflow: 'hidden'}} onPress={ () => this.props.navigation.navigate("CestaAlterarEndereco", { rd_param: Math.random(0) })}>
+							<Text style={{padding: 5, color: '#000', fontSize: 18}}>Endereço de Entrega:</Text>
 							<Text style={{paddingHorizontal: 5, paddingVertical: 2, color: '#000', fontSize: 14}}>Rua dos Caicós, 558 - Centro</Text>
 							<Text style={{paddingHorizontal: 5, paddingVertical: 2, color: '#000', fontSize: 14}}>(84) 9 8855-5016</Text>
 						</TouchableOpacity>
 					</View>
+					</ScrollView>
+				</View>
+				<View style={{borderTopWidth: 1, borderTopColor: '#ccc'}}>
 					<View style={{padding: 5}}>
 						<Text style={{fontSize: 25}}>Total Pedido R${this.state.total.toFixed(2)}</Text>
 					</View>
@@ -122,6 +123,7 @@ export default class Cesta extends Component {
 						<Text style={estilos.texto_fechar_pedido}>Fechar Pedido</Text>
 					</TouchableOpacity>
 				</View>
+				<ShoppingFooterMenu navigation={this.props.navigation}/>
 			</View>
 		);
 	}
