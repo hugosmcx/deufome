@@ -2,7 +2,8 @@ import { StyleSheet } from "react-native";
 
 export const EstiloLoja = StyleSheet.create({
 	principal: {
-		flex: 1
+		flex: 1,
+		backgroundColor: "#fff"
 	},
 	rolagem: {
 		flex: 1

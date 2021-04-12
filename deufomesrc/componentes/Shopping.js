@@ -38,7 +38,7 @@ export default class Shopping extends Component {
 		},
 		textoatu: {
 			textAlign: 'center',
-			color: '#0090FF',
+			color: '#F00',
 			padding: 5,
 			fontSize: 13
 		}
@@ -92,7 +92,7 @@ export default class Shopping extends Component {
 					</ScrollView>
 				</View>
 				<CestaNot navigation={this.props.navigation}/>
-				<ShoppingFooterMenu/>
+				<ShoppingFooterMenu navigation={this.props.navigation}/>
 			</View>
 		);
 	};

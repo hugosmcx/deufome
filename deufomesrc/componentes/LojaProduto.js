@@ -4,6 +4,7 @@ import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 
 import { DF_BASE_URL } from './DeuFome';
 import BarraVoltar from './BarraVoltar';
+import ShoppingFooterMenu from './ShoppingFooterMenu';
 import CestaNot from './CestaNot';
 import { EstiloLojaProduto as estilos } from '../estilos/esLojaProduto';
 
@@ -252,6 +253,7 @@ export default class LojaProduto extends Component {
 					</TouchableOpacity>
 				</View>
 				<CestaNot navigation={this.props.navigation}/>
+				<ShoppingFooterMenu navigation={this.props.navigation}/>
 			</View>
 		);
 	}

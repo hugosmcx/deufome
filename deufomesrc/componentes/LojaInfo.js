@@ -4,6 +4,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 
 import BarraVoltar from './BarraVoltar';
+import ShoppingFooterMenu from './ShoppingFooterMenu';
 import LojaInfoAvaliacao from './LojaInfoAvaliacao';
 import { EstiloLojaInfo as estilos } from '../estilos/esLojaInfo';
 import { DF_BASE_URL } from './DeuFome';
@@ -100,7 +101,6 @@ export default class LojaInfo extends Component{
       		.then((response) => response.json())
     		.then((obj) => {
 				if(obj.Status == "OK"){
-					console.log(obj.Result);
 					this.setState({ avaliacoes : obj.Result});
 				}else{
 					Alert.alert('Falha ao obter dados da loja');
@@ -164,6 +164,7 @@ export default class LojaInfo extends Component{
 						{ this.state.avaliacoes.map( (item) => (<LojaInfoAvaliacao key={item.Id} avaliacao={item}/>) ) }
 					</View>
 				</ScrollView>
+				<ShoppingFooterMenu navigation={this.props.navigation}/>
 			</View>
 		);
 	}

@@ -6,6 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 
 import BarraVoltar from './BarraVoltar';
+import ShoppingFooterMenu from './ShoppingFooterMenu';
 import LojaGrupo from './LojaGrupo';
 import LojaFechada from './LojaFechada';
 import CestaNot from './CestaNot';
@@ -102,6 +103,7 @@ export default class Loja extends Component {
 					</View>
 				</ScrollView>
 				<CestaNot navigation={this.props.navigation}/>
+				<ShoppingFooterMenu navigation={this.props.navigation}/>
 			</View>
 		);
 	}

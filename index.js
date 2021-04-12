@@ -12,6 +12,7 @@ import Loja from './deufomesrc/componentes/Loja';
 import LojaInfo from './deufomesrc/componentes/LojaInfo';
 import LojaProduto from './deufomesrc/componentes/LojaProduto';
 import Cesta from './deufomesrc/componentes/Cesta';
+import CestaAlterarEndereco from './deufomesrc/componentes/CestaAlterarEndereco';
 import { EstiloIndex as estilos } from './deufomesrc/estilos/esIndex';
 
 const Stack = createStackNavigator();
@@ -245,6 +246,7 @@ class AppDeuFome extends Component {
 					<Stack.Screen name="LojaInfo" component={LojaInfo} initialParams={ { rd_param : Date.now(), loja_id : 0} } />
 					<Stack.Screen name="LojaProduto" component={LojaProduto} initialParams={ {rd_param : Date.now(), produto_id : 0} } />
 					<Stack.Screen name="Cesta" component={Cesta} initialParams={ {rd_param : Date.now()} } />
+					<Stack.Screen name="CestaAlterarEndereco" component={CestaAlterarEndereco} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		);
