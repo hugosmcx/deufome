@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 
 import LojaGrupoItem from './LojaGrupoItem';
-import { EstiloLojaGrupo as estilos } from '../estilos/esLojaGrupo';
+import { EstiloLojaGrupo as estilos } from './esLojaGrupo';
 
 
 export default class LojaGrupo extends Component {

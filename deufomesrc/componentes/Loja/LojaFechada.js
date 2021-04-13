@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 
-import { EstiloLojaFechada as estilos } from '../estilos/esLojaFechada';
+import { EstiloLojaFechada as estilos } from './esLojaFechada';
 
 export default class LojaFechada extends Component{
 

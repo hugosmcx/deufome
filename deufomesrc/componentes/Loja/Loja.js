@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import { Image, View, Text, Alert, TouchableOpacity } from 'react-native';
-import { DF_BASE_URL } from './DeuFome';
-import { EstiloLoja as estilos } from '../estilos/esLoja';
-import { ScrollView } from 'react-native-gesture-handler';
-import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
+import { Image, View, Text, Alert, TouchableOpacity, ScrollView } from 'react-native';
+import { EstiloLoja as estilos } from './esLoja';
+import {SuperHTTP, SuperHTTPURLBase} from '../Utils/SuperHTTP';
 
-import BarraVoltar from './BarraVoltar';
-import ShoppingFooterMenu from './ShoppingFooterMenu';
+import BarraVoltar from '../BarraNevegacao/BarraVoltar';
+import ShoppingFooterMenu from '../Shopping/ShoppingFooterMenu';
 import LojaGrupo from './LojaGrupo';
 import LojaFechada from './LojaFechada';
-import CestaNot from './CestaNot';
+import SacolaNot from '../Sacola/SacolaNot';
 
 export default class Loja extends Component {
 
@@ -43,26 +41,13 @@ export default class Loja extends Component {
 	}
 
 	carregaloja(){
-		RNSecureStorage.get("biscoito")
-		.then((biscoito) => {
-			var fd = new FormData();
-			fd.append('cookie', biscoito);
-			fd.append('loja', this.props.route.params.loja_id);
-
-			fetch(DF_BASE_URL + 'api/menu-loja.php', {method : 'POST', body : fd})
-      		.then((response) => response.json())
-    		.then((obj) => {
-				if(obj.Status == "OK"){
-					this.setState({ loja : obj.Result});
-				}else{
-					Alert.alert('Falha ao obter dados da loja');
-				}
-			})
-      		.catch((erro) => {
-				Alert.alert('Serviço Indisponível');
-			});
+		SuperHTTP(this.props.navigation, 'menu-loja.php', {LojaId:  this.props.route.params.loja_id})
+		.then((ret) => {
+			this.setState({ loja :ret});
 		})
-		.catch((erro) => { console.log(erro) });
+		.catch((err) => {
+			Alert.alert(err)
+		});
 	}
 
 	render(){
@@ -71,22 +56,22 @@ export default class Loja extends Component {
 				<BarraVoltar texto={this.state.loja.NomeFantasia} navigation={this.props.navigation}/>
 				<ScrollView style={estilos.rolagem}>
 					<View>
-						<Image style={estilos.imagem_loja} source={ {uri : DF_BASE_URL + 'img/emp_' + this.state.loja_id + '.jpg'} }/>
+						<Image style={estilos.imagem_loja} source={ {uri : SuperHTTPURLBase + 'img/emp_' + this.state.loja_id + '.jpg'} }/>
 					</View>
 					<View style={estilos.empresa}>
-						<Image style={estilos.imagem_logo} source={{uri : DF_BASE_URL + 'img/emp_logo_' + this.state.loja_id + '.jpg'}}/>
+						<Image style={estilos.imagem_logo} source={{uri : SuperHTTPURLBase + 'img/emp_logo_' + this.state.loja_id + '.jpg'}}/>
 						<View>
 							<Text style={estilos.empresa_texto}>{this.state.loja.NomeFantasia}</Text>
 							<View>
 								<View style={estilos.grupo_estrela}>
-									{ this.state.loja.Estrelas.map( (item) => (<Image style={estilos.estrela} key={item} source={require('../imagens/star.png')}/>)) }
+									{ this.state.loja.Estrelas.map( (item) => (<Image style={estilos.estrela} key={item} source={require('../../imagens/star.png')}/>)) }
 								</View>
 								<View style={estilos.grupo_entrega}>
-									<Image style={estilos.motoqueiro} source={require('../imagens/icone.png')}/>
+									<Image style={estilos.motoqueiro} source={require('../../imagens/icone.png')}/>
 									<Text style={estilos.grupo_texto}>Tempo: até {this.state.loja.TempoEntrega} minutos</Text>
 								</View>
 								<View style={estilos.grupo_valor_minimo}>
-									<Image style={estilos.motoqueiro} source={require('../imagens/coin.png')}/>
+									<Image style={estilos.motoqueiro} source={require('../../imagens/coin.png')}/>
 									<Text style={estilos.grupo_texto}>Valor mínimo R${this.state.loja.ValorMinimo.toFixed(2)}</Text>
 								</View>
 								<View style={estilos.grupo_ver_mais}>
@@ -102,7 +87,7 @@ export default class Loja extends Component {
 						{ this.state.loja.Grupos.map( (item) => (<LojaGrupo navigation={this.props.navigation} key={item.Id} grupo={item}/>) ) } 
 					</View>
 				</ScrollView>
-				<CestaNot navigation={this.props.navigation}/>
+				<SacolaNot navigation={this.props.navigation}/>
 				<ShoppingFooterMenu navigation={this.props.navigation}/>
 			</View>
 		);

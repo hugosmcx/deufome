@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { ScrollView } from "react-native-gesture-handler";
 import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 
-import BarraVoltar from './BarraVoltar';
+import BarraVoltar from './BarraNevegacao/BarraVoltar';
 import ShoppingFooterMenu from './ShoppingFooterMenu';
 import LojaInfoAvaliacao from './LojaInfoAvaliacao';
 import { EstiloLojaInfo as estilos } from '../estilos/esLojaInfo';

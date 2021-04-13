@@ -3,7 +3,7 @@ import { Image, StyleSheet, TextInput, TouchableOpacity, View, Text } from 'reac
 import { ScrollView } from 'react-native-gesture-handler';
 import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 
-import BarraVoltar from './BarraVoltar';
+import BarraVoltar from './BarraNevegacao/BarraVoltar';
 import ItemLocalizacao from './ItemLocalizacao';
 import { DF_BASE_URL } from './DeuFome';
 

@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
-import { DF_BASE_URL } from './DeuFome'; 
 
-import { EstiloCestaNot as estilos } from '../estilos/esCestaNot';
+import { EstiloSacolaNot as estilos } from './esSacolaNot';
 
-export default class CestaNot extends Component {
+export default class SacolaNot extends Component {
 
 	constructor(props){
 		super(props);
@@ -13,7 +12,7 @@ export default class CestaNot extends Component {
 		this.state = {Quantidade : 0};
 	}
 
-	componentDidMount(){
+	XcomponentDidMount(){
 		RNSecureStorage.get("biscoito")
 		.then((biscoito) => {
 			var fd = new FormData();

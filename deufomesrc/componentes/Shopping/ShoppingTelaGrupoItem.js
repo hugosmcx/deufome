@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { DF_BASE_URL } from './DeuFome';
+import {SuperHTTPURLBase} from '../Utils/SuperHTTP';
 
 export default class ShoppingTelaGrupoItem extends Component {
 	constructor(props){
@@ -37,7 +37,7 @@ export default class ShoppingTelaGrupoItem extends Component {
 		return (
 			<View style={this.estilos.principal}>
 				<TouchableOpacity style={this.estilos.botao}  onPress={ ()=> { this.props.navigation.navigate('Loja', {loja_id : this.props.item.Id}); }}>
-					<Image style={this.estilos.imagem} source={ {uri : DF_BASE_URL + 'img/emp_logo_' + this.props.item.Id + '.jpg'} }/>
+					<Image style={this.estilos.imagem} source={ {uri : SuperHTTPURLBase + 'img/emp_logo_' + this.props.item.Id + '.jpg'} }/>
 				</TouchableOpacity>
 				<Text style={this.estilos.texto}>{ this.props.item.Nome }</Text>
 			</View>

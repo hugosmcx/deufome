@@ -4,7 +4,7 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert } from 'reac
 import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 import { DF_BASE_URL } from './DeuFome';
 
-import BarraVoltar from './BarraVoltar';
+import BarraVoltar from './BarraNevegacao/BarraVoltar';
 import ShoppingFooterMenu from './ShoppingFooterMenu';
 
 export default class CestaAlterarEndereco extends Component {

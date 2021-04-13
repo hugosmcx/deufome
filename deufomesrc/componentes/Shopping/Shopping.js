@@ -1,19 +1,14 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, ScrollView, Alert, StatusBar, Text, TouchableOpacity } from 'react-native';
-import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 
 import ShoppingLocalizacao from './ShoppingLocalizacao';
 import ShoppingTela from './ShoppingTela';
 import ShoppingFooterMenu from './ShoppingFooterMenu';
-import { DF_BASE_URL } from './DeuFome'; 
-import CestaNot from './CestaNot';
+import SacolaNot from '../Sacola/SacolaNot';
+
+import {SuperHTTP} from '../Utils/SuperHTTP';
 
 export default class Shopping extends Component {
-
-	DF_ATUALIZANDO = false;
-
-	DF_ESTADO_ANTERIOR = "";
-
 
 	constructor(props){
 		super(props);
@@ -48,34 +43,15 @@ export default class Shopping extends Component {
 		this.carregamenu();
 	}
 
-	componentDidUpdate(){
-		if(this.props.route.params.estado_novo){
-			if((this.DF_ESTADO_ANTERIOR != this.props.route.params.estado_novo)){
-				this.DF_ESTADO_ANTERIOR = this.props.route.params.estado_novo;
-				this.carregamenu();
-			}
-		}
-	}
-
 	carregamenu(){
 		this.setState({cardapio: []});
-		this.DF_ATUALIZANDO = true;
-		RNSecureStorage.get("biscoito")
-		.then((biscoito) => {
-			var fd = new FormData();
-			fd.append('cookie', biscoito);
-
-			fetch(DF_BASE_URL + 'api/menu.php', {method : 'POST', body : fd})
-      		.then((response) => response.json())
-    		.then((obj) => {
-				this.setState({ cardapio : obj.Result.Ramos, cidade : obj.Result.Cidade});
-				this.UP_ATUALIZAR = true;
-			})
-      		.catch((erro) => {
-				Alert.alert('Serviço Indisponível');
-			});
+		SuperHTTP(this.props.navigation, 'menu.php', {})
+		.then((ret) => {
+			this.setState({ cardapio : ret.Ramos, cidade : ret.Cidade});
 		})
-		.catch((erro) => { console.log(erro) });
+		.catch((err) => {
+			Alert.alert(err);
+		});
 	}
 
 	render(){
@@ -91,7 +67,7 @@ export default class Shopping extends Component {
 						<ShoppingTela cardapio={this.state.cardapio} navigation={this.props.navigation}/>
 					</ScrollView>
 				</View>
-				<CestaNot navigation={this.props.navigation}/>
+				<SacolaNot navigation={this.props.navigation}/>
 				<ShoppingFooterMenu navigation={this.props.navigation}/>
 			</View>
 		);

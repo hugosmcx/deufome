@@ -3,7 +3,7 @@ import { View, Text, Image, ScrollView, TouchableOpacity, Alert } from 'react-na
 import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 
 import { DF_BASE_URL } from './DeuFome';
-import BarraVoltar from './BarraVoltar';
+import BarraVoltar from './BarraNevegacao/BarraVoltar';
 import ShoppingFooterMenu from './ShoppingFooterMenu';
 import CestaNot from './CestaNot';
 import { EstiloLojaProduto as estilos } from '../estilos/esLojaProduto';

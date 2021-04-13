@@ -1,1 +1,0 @@
-export const DF_BASE_URL = 'http://192.168.218.2/deufomeapi/';

@@ -39,22 +39,22 @@ export default class ShoppingFooterMenu extends Component {
 			<View style={this.estilos.principal}>
 				<View style={this.estilos.botoes}>
 					<TouchableOpacity style={this.estilos.botao} onPress={ () => this.props.navigation.navigate("Shopping", {rd_param : Math.random()})}>
-						<Image style={this.estilos.imagembotao} source={ require('../imagens/menu_home.png') }/>
+						<Image style={this.estilos.imagembotao} source={ require('../../imagens/menu_home.png') }/>
 					</TouchableOpacity>
 				</View>
 				<View style={this.estilos.botoes}>
 					<TouchableOpacity style={this.estilos.botao}>
-						<Image style={this.estilos.imagembotao} source={ require('../imagens/menu_search.png') }/>
+						<Image style={this.estilos.imagembotao} source={ require('../../imagens/menu_search.png') }/>
 					</TouchableOpacity>
 				</View>
 				<View style={this.estilos.botoes}>
 					<TouchableOpacity style={this.estilos.botao}>
-						<Image style={this.estilos.imagembotao} source={ require('../imagens/menu_order.png') }/>
+						<Image style={this.estilos.imagembotao} source={ require('../../imagens/menu_order.png') }/>
 					</TouchableOpacity>
 				</View>
 				<View style={this.estilos.botoes}>
 					<TouchableOpacity style={this.estilos.botao}>
-						<Image style={this.estilos.imagembotao} source={ require('../imagens/menu_profile.png') }/>
+						<Image style={this.estilos.imagembotao} source={ require('../../imagens/menu_profile.png') }/>
 					</TouchableOpacity>
 				</View>
 			</View>

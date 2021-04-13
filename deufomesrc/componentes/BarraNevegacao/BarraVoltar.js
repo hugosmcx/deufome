@@ -32,7 +32,7 @@ export default class BarraVoltar extends Component {
 		return (
 			<View style={this.estilos.principal}>
 				<TouchableOpacity style={this.estilos.botao} onPress={() => this.props.navigation.goBack()}>
-					<Image style={this.estilos.imagem} source={require('../imagens/arrow_left.png')}/>
+					<Image style={this.estilos.imagem} source={require('../../imagens/arrow_left.png')}/>
 				</TouchableOpacity>
 				<Text style={this.estilos.texto}>{this.props.texto}</Text>
 			</View>

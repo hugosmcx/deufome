@@ -6,8 +6,9 @@ import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 import { DF_BASE_URL } from './DeuFome';
 
 import { EstiloCesta as estilos } from '../estilos/esCesta';
-import BarraVoltar from './BarraVoltar';
+import BarraVoltar from './BarraNevegacao/BarraVoltar';
 import ShoppingFooterMenu from './ShoppingFooterMenu';
+import { SuperHTTP } from './Utils/SuperHTTP';
 
 export default class Cesta extends Component {
 
@@ -22,25 +23,8 @@ export default class Cesta extends Component {
 	}
 
 	carrega_lista(){
-		RNSecureStorage.get("biscoito")
-		.then((biscoito) => {
-			var fd = new FormData();
-			fd.append('cookie', biscoito);
-
-			fetch(DF_BASE_URL + 'api/cesta.php', {method : 'POST', body : fd})
-      		.then((response) => response.json())
-    		.then((obj) => {
-				if(obj.Status == "OK"){
-					this.setState({ total: obj.Result.Total, sacola : obj.Result.Itens});
-				}else{
-					Alert.alert('Falha ao obter dados da loja');
-				}
-			})
-      		.catch((erro) => {
-				Alert.alert('Serviço Indisponível');
-			});
-		})
-		.catch((erro) => { console.log(erro) });
+		SuperHTTP.length(navigator, 'cesta.php', {})
+		.then((obj) => this.setState({ total: obj.Total, sacola : obj.Itens}));
 	}
 
 	remover_item(id){
