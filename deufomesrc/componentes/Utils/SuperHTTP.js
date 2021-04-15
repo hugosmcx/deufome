@@ -11,8 +11,8 @@ export const SuperHTTP = (navigation, pServico, pFormulario) => {
 				if(obj.Status == 'OK'){
 					resolve(obj.Result);
 				}else if(obj.Status == 'UNAUTHORIZED'){
-					navigation.navigate("LoginEmail", {rd_param : Math.random()});
-					reject('');
+					navigation.push("LoginEmail");
+					reject('Entre com seu e-mail');
 				}else if(obj.Status == 'ERROR'){
 					reject(obj.Message);
 				}else{

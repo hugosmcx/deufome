@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, TextInput, TouchableOpacity, View, Text } from 'react-native';
+import { Image, StyleSheet, TextInput, TouchableOpacity, View, Text, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 
-import BarraVoltar from './BarraNevegacao/BarraVoltar';
+import BarraVoltar from '../BarraNevegacao/BarraVoltar';
 import ItemLocalizacao from './ItemLocalizacao';
-import { DF_BASE_URL } from './DeuFome';
+import { SuperHTTP } from '../Utils/SuperHTTP';
 
 export default class AlterarLocalizacao extends Component {
 
@@ -51,26 +50,13 @@ export default class AlterarLocalizacao extends Component {
 	}
 
 	pesquisar(){
-		RNSecureStorage.get("biscoito")
-		.then((biscoito) => {
-			var fd = new FormData();
-			fd.append('cookie', biscoito);
-			fd.append('cidade', this.state.textoPesquisa);
-			fetch(DF_BASE_URL + 'api/pesquisa-cidade.php', {method : 'POST', body : fd})
-      		.then((response) => response.json())
-    		.then((obj) => {
-				if(obj.Status == "OK"){
-					this.setState({ cidades : obj.Result });
-				}else{
-					Alert.alert('Ocorreu um erro ao buscar as cidades');
-				}
-			})
-      		.catch((erro) => {
-				Alert.alert('Serviço Indisponível');
-				this.setState({ tela : 'SemInternet' });
-			});
+		SuperHTTP(this.props.navigation, 'pesquisa-cidade.php', {Cidade: this.state.textoPesquisa})
+		.then((ret) => {
+			this.setState({ cidades : ret })
 		})
-		.catch((erro) => { console.log(erro) });
+		.catch((err) => {
+			Alert.alert(err);
+		});
 	}
 
 	render(){
@@ -80,7 +66,7 @@ export default class AlterarLocalizacao extends Component {
 				<View style={this.estilos.pesquisa}>
 					<TextInput style={this.estilos.entrada} placeholder='Digite sua cidade' value={this.state.textoPesquisa} onChangeText={ (valor) => this.setState({textoPesquisa : valor})}/>
 					<TouchableOpacity onPress={ () => this.pesquisar()}>
-						<Image style={this.estilos.imagem} source={ require('../imagens/menu_search.png')}/>
+						<Image style={this.estilos.imagem} source={ require('../../imagens/menu_search.png')}/>
 					</TouchableOpacity>
 				</View>
 				<View style={this.estilos.containerlista}>

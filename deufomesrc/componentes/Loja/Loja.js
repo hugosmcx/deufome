@@ -75,7 +75,7 @@ export default class Loja extends Component {
 									<Text style={estilos.grupo_texto}>Valor mínimo R${this.state.loja.ValorMinimo.toFixed(2)}</Text>
 								</View>
 								<View style={estilos.grupo_ver_mais}>
-									<TouchableOpacity onPress={ () => this.props.navigation.navigate('LojaInfo', { loja_id : this.state.loja_id})}>
+									<TouchableOpacity onPress={ () => this.props.navigation.push('LojaInfo', { loja_id : this.state.loja_id})}>
 										<Text style={estilos.texto_ver_mais}>Ver mais</Text>
 									</TouchableOpacity>
 								</View>

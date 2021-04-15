@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export const EstiloCestaNot = StyleSheet.create({
+export const EstiloSacolaNot = StyleSheet.create({
 	principal: {
 		backgroundColor: '#fff',
 		padding: 0

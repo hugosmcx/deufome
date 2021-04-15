@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Image, Alert } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-
+import { View, Text, ScrollView, Image, Alert, TouchableOpacity} from 'react-native';
 import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
-import { DF_BASE_URL } from './DeuFome';
 
-import { EstiloCesta as estilos } from '../estilos/esCesta';
-import BarraVoltar from './BarraNevegacao/BarraVoltar';
-import ShoppingFooterMenu from './ShoppingFooterMenu';
-import { SuperHTTP } from './Utils/SuperHTTP';
+import { EstiloCesta as estilos } from './esCesta';
+import BarraVoltar from '../BarraNevegacao/BarraVoltar';
+import ShoppingFooterMenu from '../Shopping/ShoppingFooterMenu';
 
 export default class Cesta extends Component {
 
@@ -23,31 +19,36 @@ export default class Cesta extends Component {
 	}
 
 	carrega_lista(){
-		SuperHTTP.length(navigator, 'cesta.php', {})
-		.then((obj) => this.setState({ total: obj.Total, sacola : obj.Itens}));
+		RNSecureStorage.get("sacola")
+		.then((sacola) => {
+			var lSacola = JSON.parse(sacola);
+			var total = 0.00;
+			for(var i = 0; i < lSacola.Itens.length; i++){
+				total += lSacola.Itens[i].Total;
+			}
+			this.setState({total: total, sacola: lSacola.Itens});
+		})
+		.catch(err => {console.log(err)});
 	}
 
 	remover_item(id){
-		console.log("ItemId: " + id);
-		this.setState({ total: 0.00, sacola : []});
-		RNSecureStorage.get("biscoito")
-		.then((biscoito) => {
-			var fd = new FormData();
-			fd.append('cookie', biscoito);
-			fd.append('item_id', id);
-
-			fetch(DF_BASE_URL + 'api/cesta-rem.php', {method : 'POST', body : fd})
-      		.then((response) => response.json())
-    		.then((obj) => {
-				if(obj.Status == "OK"){
-					this.carrega_lista();
-				}else{
-					Alert.alert('Falha ao remover o item da sacola');
+		RNSecureStorage.get("sacola")
+		.then((sacola) => {
+			var lSacola = JSON.parse(sacola);
+			var nItens = [];
+			var total = 0.00;
+			for(var i = 0; i < lSacola.Itens.length; i++){
+				if(lSacola.Itens[i].Id != id){
+					nItens.push(lSacola.Itens[i]);
+					total += lSacola.Itens[i].Total;
 				}
-			})
-      		.catch((erro) => {
-				Alert.alert('Serviço Indisponível');
-			});
+			}
+			lSacola.Itens = nItens;
+			RNSecureStorage.set("sacola", JSON.stringify(lSacola), {accessible: ACCESSIBLE.WHEN_UNLOCKED})
+			.then((res) => {
+				this.setState({total: total, sacola: lSacola.Itens});
+			}, (err) => {});
+			
 		})
 		.catch((erro) => { console.log(erro) });
 	}
@@ -70,8 +71,8 @@ export default class Cesta extends Component {
 								<View key={produto.Id} style={{borderWidth: 1, borderColor: '#ccc', borderRadius: 5, margin: 5, overflow: 'hidden'}}>
 									<View style={{backgroundColor: '#eee', flexDirection: 'row'}}>
 										<Text style={{padding: 5, fontSize: 20, flex: 1, color: '#000'}}>{produto.Nome}</Text>
-										<TouchableOpacity style={{backgroundColor: '#f00', padding: 5}} onPress={() => this.remover_item(produto.Id)}>
-											<Image style={{width: 25, height: 25}} source={require('../imagens/trash.png')}/>
+										<TouchableOpacity style={{backgroundColor: '#f00', padding: 5, justifyContent: 'center', alignItems: 'center'}} onPress={() => this.remover_item(produto.Id)}>
+											<Image style={{width: 25, height: 25}} source={require('../../imagens/trash.png')}/>
 										</TouchableOpacity>
 									</View>
 									{
@@ -91,15 +92,13 @@ export default class Cesta extends Component {
 							) )
 						}
 						<View>
-						<TouchableOpacity style={{borderWidth: 1, borderColor: '#f00', margin: 5, overflow: 'hidden'}} onPress={ () => this.props.navigation.navigate("CestaAlterarEndereco", { rd_param: Math.random(0) })}>
-							<Text style={{padding: 5, color: '#000', fontSize: 18}}>Endereço de Entrega:</Text>
-							<Text style={{paddingHorizontal: 5, paddingVertical: 2, color: '#000', fontSize: 14}}>Rua dos Caicós, 558 - Centro</Text>
-							<Text style={{paddingHorizontal: 5, paddingVertical: 2, color: '#000', fontSize: 14}}>(84) 9 8855-5016</Text>
-						</TouchableOpacity>
 					</View>
 					</ScrollView>
 				</View>
 				<View style={{borderTopWidth: 1, borderTopColor: '#ccc'}}>
+					<TouchableOpacity style={{borderWidth: 1, borderColor: '#f00', margin: 5, overflow: 'hidden'}} onPress={ () => this.props.navigation.push("CestaAlterarEndereco")}>
+						<Text style={{padding: 5, color: '#000', fontSize: 18}}>Enviar para: Trabalho</Text>
+					</TouchableOpacity>
 					<View style={{padding: 5}}>
 						<Text style={{fontSize: 25}}>Total Pedido R${this.state.total.toFixed(2)}</Text>
 					</View>

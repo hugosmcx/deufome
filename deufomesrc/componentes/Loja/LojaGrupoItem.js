@@ -9,7 +9,7 @@ export default class LojaGrupoItem extends Component {
 	render(){
 		return (
 			<View style={estilos.principal}>
-				<TouchableOpacity style={estilos.botao} onPress={ () => this.props.navigation.navigate("LojaProduto", {produto_id : this.props.produto.Id})}>
+				<TouchableOpacity style={estilos.botao} onPress={ () => this.props.navigation.push("LojaProduto", {produto_id : this.props.produto.Id})}>
 					<Image style={estilos.imagem} source={ { uri : SuperHTTPURLBase + '/img/pro_' + this.props.produto.Id + '.jpg'} }/>
 					<View style={estilos.grupo_texto}>
 						<Text style={estilos.texto}>{this.props.produto.Nome}</Text>

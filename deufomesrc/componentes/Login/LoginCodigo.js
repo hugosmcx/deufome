@@ -25,10 +25,12 @@ export default class LoginCodigo extends Component {
 				if(ret.Status == "OK"){
 					RNSecureStorage.set("token", ret.Token, {accessible: ACCESSIBLE.WHEN_UNLOCKED})
 					.then((res) => {
-						this.props.navigation.navigate('Shopping', {rd_param: Math.random()});
+						this.props.navigation.push('Shopping');
 					}, (err) => {
 						Alert.alert(err);
 					});
+				}else{
+					Alert.alert(ret.Message);
 				}
 			});
 		}
@@ -38,7 +40,7 @@ export default class LoginCodigo extends Component {
 		return (
 			<View style={{flex: 1, backgroundColor: '#FFF', justifyContent: 'center', alignItems: 'center'}}>
 				<StatusBar backgroundColor="#000"/>
-				<View>
+				<View style={{paddingHorizontal: 20}}>
 					<View style={{marginVertical: 20}}>
 						<Text style={{fontSize: 25, color: '#000'}}>Um e-mail foi enviado para {this.state.email} com o código de acesso</Text>
 					</View>
@@ -46,7 +48,7 @@ export default class LoginCodigo extends Component {
 						<Text style={{color: '#000', fontSize: 15}}>Informe o código enviado por e-mail</Text>
 						<TextInput style={[EstiloBase.entrada, {textAlign: 'center', fontSize: 40}]} keyboardType="numeric" placeholder=" - - -   - - - " onChangeText={ (valor) => {this.setState({'codigo' : valor})}} value={this.state.codigo}/>
 					</View>
-					<View style={{flexDirection: 'row', justifyContent: 'center', marginVertical: 15}}>
+					<View style={{flexDirection: 'row', justifyContent: 'center', marginVertical: 15, paddingHorizontal: 10}}>
 						<Text style={{color: '#000', fontSize: 15}}>Não recebeu o código?</Text>
 						<TouchableOpacity>
 							<Text style={{color: '#F00', fontSize: 15}}> Enviar um novo Código</Text>

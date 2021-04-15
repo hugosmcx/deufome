@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 
-import { DF_BASE_URL } from './DeuFome';
-import BarraVoltar from './BarraNevegacao/BarraVoltar';
-import ShoppingFooterMenu from './ShoppingFooterMenu';
-import CestaNot from './CestaNot';
-import { EstiloLojaProduto as estilos } from '../estilos/esLojaProduto';
+import {SuperHTTP, SuperHTTPURLBase} from '../Utils/SuperHTTP';
+import BarraVoltar from '../BarraNevegacao/BarraVoltar';
+import ShoppingFooterMenu from '../Shopping/ShoppingFooterMenu';
+import SacolaNot from '../Sacola/SacolaNot';
+import { EstiloLojaProduto as estilos } from './esLojaProduto';
 
 export default class LojaProduto extends Component {
 
@@ -21,6 +21,7 @@ export default class LojaProduto extends Component {
 				Nome: '',
 				Descricao: '',
 				Preco: 0.0,
+				Quantidade: 0,
 				Complementos: []
 			},
 			ValorFinal: 0.0
@@ -32,27 +33,45 @@ export default class LojaProduto extends Component {
 	}
 
 	carregaproduto(){
-		RNSecureStorage.get("biscoito")
-		.then((biscoito) => {
-			var fd = new FormData();
-			fd.append('cookie', biscoito);
-			fd.append('produto_id', this.props.route.params.produto_id);
-
-			fetch(DF_BASE_URL + 'api/loja-produto.php', {method : 'POST', body : fd})
-      		.then((response) => response.json())
-    		.then((obj) => {
-				if(obj.Status == "OK"){
-					this.setState({ dados : obj.Result});
-					this.calcular_total();
-				}else{
-					Alert.alert('Falha ao obter dados da loja');
-				}
-			})
-      		.catch((erro) => {
-				Alert.alert('Serviço Indisponível');
-			});
+		SuperHTTP(this.props.navigation, 'loja-produto.php', {ProdutoId: this.props.route.params.produto_id})
+		.then((ret) => {
+			this.processa_produto(ret);
 		})
-		.catch((erro) => { console.log(erro) });
+		.catch((err) => {
+			Alert.alert(err);
+		});
+	}
+
+	processa_produto(ret){
+		var lpro = {};
+		lpro.Id = ret.Id;
+		lpro.Nome = ret.Nome;
+		lpro.Descricao = ret.Descricao;
+		lpro.Preco = ret.Preco;
+		lpro.Quantidade = 1;
+		lpro.Complementos = [];
+
+		for(var i = 0; i < ret.Complementos.length; i++){
+			var tmp = [];
+			for(var j = 0; j < ret.Complementos[i].Itens.length; j++){
+				tmp.push({
+					Id: ret.Complementos[i].Itens[j].Id,
+					Nome: ret.Complementos[i].Itens[j].Nome,
+					Preco: ret.Complementos[i].Itens[j].Preco,
+					Quantidade: 0
+				});
+			}
+			lpro.Complementos.push({
+				Id: ret.Complementos[i].Id,
+				Nome: ret.Complementos[i].Nome,
+				Obrigatorio: ret.Complementos[i].Obrigatorio,
+				Minimo: ret.Complementos[i].Minimo,
+				Maximo: ret.Complementos[i].Maximo,
+				Itens: tmp
+			});
+		}
+
+		this.setState({ dados : lpro, empresa_id: ret.EmpresaId, ValorFinal: ret.Preco});
 	}
 
 	calcular_total(){
@@ -158,26 +177,50 @@ export default class LojaProduto extends Component {
 		if(tem_revisao){
 			Alert.alert("Revise as opções do produto antes de pôr na sacola");
 		}else{
-			RNSecureStorage.get("biscoito")
-			.then((biscoito) => {
-				var fd = new FormData();
-				fd.append('cookie', biscoito);
-				console.log(JSON.stringify(this.state.dados));
-				fd.append('produto', JSON.stringify(this.state.dados));
+			RNSecureStorage.get("sacola")
+			.then((sacola) => {
+				if(sacola == null || sacola == ''){
+					sacola = '{"EmpresaId":0,"Itens":[]}';
+				}
+				var lSacola = JSON.parse(sacola);
+				if(lSacola.EmpresaId != this.state.empresa_id){
+					lSacola = {};
+					lSacola.EmpresaId = this.state.empresa_id;
+					lSacola.Itens = [];
+				}
 
-				fetch(DF_BASE_URL + 'api/cesta-add.php', {method : 'POST', body : fd})
-				.then((response) => response.json())
-				.then((obj) => {
-					if(obj.Status == "OK"){
-						this.props.navigation.navigate('Cesta');
-					}else{
-						Alert.alert('Falha ao obter dados da loja');
+				var lpro = {};
+				lpro.Id = this.state.dados.Id;
+				lpro.Nome = this.state.dados.Nome;
+				lpro.Total = this.state.ValorFinal;
+				lpro.Complementos = [];
+
+				for(var i = 0; i < this.state.dados.Complementos.length; i++){
+					var tmp = {};
+					tmp.Id = this.state.dados.Complementos[i].Id;
+					tmp.Nome = this.state.dados.Complementos[i].Nome;
+					tmp.Itens = [];
+					for(var j = 0; j < this.state.dados.Complementos[i].Itens.length; j++){
+						if(this.state.dados.Complementos[i].Itens[j].Quantidade > 0){
+							tmp.Itens.push({
+								Id: this.state.dados.Complementos[i].Itens[j].Id,
+								Nome: this.state.dados.Complementos[i].Itens[j].Nome,
+								Quantidade: this.state.dados.Complementos[i].Itens[j].Quantidade
+							});
+						}
 					}
-				})
-				.catch((erro) => {
-					console.log(erro);
-					Alert.alert('Serviço Indisponível');
-				});
+					if(tmp.Itens.length > 0){
+						lpro.Complementos.push(tmp);
+					}
+				}
+
+
+				lSacola.Itens.push(lpro);
+
+				RNSecureStorage.set("sacola", JSON.stringify(lSacola), {accessible: ACCESSIBLE.WHEN_UNLOCKED})
+				.then((res) => {
+						this.props.navigation.push('Cesta');
+				}, (err) => {});
 			})
 			.catch((erro) => { console.log(erro) })
 		}
@@ -189,7 +232,7 @@ export default class LojaProduto extends Component {
 				<BarraVoltar navigation={this.props.navigation} texto={this.state.dados.Nome}/>
 				<ScrollView>
 					<View style={estilos.grupo}>
-						<Image style={estilos.imagem_produto} source={ {uri : DF_BASE_URL + 'img/pro_' + this.state.dados.Id + '.jpg'} }/>
+						<Image style={estilos.imagem_produto} source={ {uri : SuperHTTPURLBase + 'img/pro_' + this.state.dados.Id + '.jpg'} }/>
 					</View>
 					<View style={estilos.grupo}>
 						<Text style={estilos.texto_titulo}>Descrição</Text>
@@ -249,10 +292,10 @@ export default class LojaProduto extends Component {
 					</View>
 					<TouchableOpacity style={estilos.botaoFinalizar} onPress={ () => this.por_na_sacola()}>
 						<Text style={estilos.textoBotaoFinalizar}>Pôr na Sacola</Text>
-						<Image style={estilos.imagemBotaoFinalizar} source={require('../imagens/bag.png')}/>
+						<Image style={estilos.imagemBotaoFinalizar} source={require('../../imagens/bag.png')}/>
 					</TouchableOpacity>
 				</View>
-				<CestaNot navigation={this.props.navigation}/>
+				<SacolaNot navigation={this.props.navigation}/>
 				<ShoppingFooterMenu navigation={this.props.navigation}/>
 			</View>
 		);

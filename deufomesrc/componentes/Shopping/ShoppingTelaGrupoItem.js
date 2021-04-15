@@ -36,7 +36,7 @@ export default class ShoppingTelaGrupoItem extends Component {
 	render(){
 		return (
 			<View style={this.estilos.principal}>
-				<TouchableOpacity style={this.estilos.botao}  onPress={ ()=> { this.props.navigation.navigate('Loja', {loja_id : this.props.item.Id}); }}>
+				<TouchableOpacity style={this.estilos.botao}  onPress={ ()=> { this.props.navigation.push('Loja', {loja_id : this.props.item.Id}); }}>
 					<Image style={this.estilos.imagem} source={ {uri : SuperHTTPURLBase + 'img/emp_logo_' + this.props.item.Id + '.jpg'} }/>
 				</TouchableOpacity>
 				<Text style={this.estilos.texto}>{ this.props.item.Nome }</Text>

@@ -12,21 +12,11 @@ export default class SacolaNot extends Component {
 		this.state = {Quantidade : 0};
 	}
 
-	XcomponentDidMount(){
-		RNSecureStorage.get("biscoito")
-		.then((biscoito) => {
-			var fd = new FormData();
-			fd.append('cookie', biscoito);
-
-			fetch(DF_BASE_URL + 'api/cesta-qtd.php', {method : 'POST', body : fd})
-      		.then((response) => response.json())
-    		.then((obj) => {
-				this.setState({ Quantidade : obj.Result});
-				this.UP_ATUALIZAR = true;
-			})
-      		.catch((erro) => {
-				Alert.alert('Serviço Indisponível');
-			});
+	componentDidMount(){
+		RNSecureStorage.get("sacola")
+		.then((sacola) => {
+			var lSacola = JSON.parse(sacola);
+			this.setState({Quantidade: lSacola.Itens.length});
 		})
 		.catch((erro) => { console.log(erro) });
 	}
@@ -35,7 +25,7 @@ export default class SacolaNot extends Component {
 		if(this.state.Quantidade == 1){
 			return (
 				<View style={estilos.principal}>
-					<TouchableOpacity style={estilos.botao}  onPress={() => this.props.navigation.navigate('Cesta')}>
+					<TouchableOpacity style={estilos.botao}  onPress={() => this.props.navigation.push('Cesta')}>
 						<Text style={estilos.texto}>1 item - ver sacola</Text>
 					</TouchableOpacity>
 				</View>
@@ -43,7 +33,7 @@ export default class SacolaNot extends Component {
 		}else if(this.state.Quantidade > 1){
 			return (
 				<View style={estilos.principal}>
-					<TouchableOpacity style={estilos.botao} onPress={() => this.props.navigation.navigate('Cesta')}>
+					<TouchableOpacity style={estilos.botao} onPress={() => this.props.navigation.push('Cesta')}>
 						<Text style={estilos.texto}>{this.state.Quantidade} itens - ver sacola</Text>
 					</TouchableOpacity>
 				</View>

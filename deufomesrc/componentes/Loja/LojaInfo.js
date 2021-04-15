@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import { View, Text } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import { ScrollView } from "react-native-gesture-handler";
 import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage';
 
-import BarraVoltar from './BarraNevegacao/BarraVoltar';
-import ShoppingFooterMenu from './ShoppingFooterMenu';
+import BarraVoltar from '../BarraNevegacao/BarraVoltar';
+import ShoppingFooterMenu from '../Shopping/ShoppingFooterMenu';
 import LojaInfoAvaliacao from './LojaInfoAvaliacao';
-import { EstiloLojaInfo as estilos } from '../estilos/esLojaInfo';
-import { DF_BASE_URL } from './DeuFome';
+import { EstiloLojaInfo as estilos } from './esLojaInfo';
+import {SuperHTTP} from '../Utils/SuperHTTP';
 
 export default class LojaInfo extends Component{
 
@@ -45,72 +45,33 @@ export default class LojaInfo extends Component{
 	}
 
 	carregainfo(){
-		RNSecureStorage.get("biscoito")
-		.then((biscoito) => {
-			var fd = new FormData();
-			fd.append('cookie', biscoito);
-			fd.append('loja_id', this.props.route.params.loja_id);
-
-			fetch(DF_BASE_URL + 'api/loja-info.php', {method : 'POST', body : fd})
-      		.then((response) => response.json())
-    		.then((obj) => {
-				if(obj.Status == "OK"){
-					this.setState({ dados : obj.Result});
-				}else{
-					Alert.alert('Falha ao obter dados da loja');
-				}
-			})
-      		.catch((erro) => {
-				Alert.alert('Serviço Indisponível');
-			});
+		SuperHTTP(this.props.navigation, 'loja-info.php', {LojaId: this.props.route.params.loja_id})
+		.then((ret) => {
+			this.setState({ dados : ret});
 		})
-		.catch((erro) => { console.log(erro) });
+		.catch((err) => {
+			Alert.alert(err)
+		});
 	}
 
 	carregahorario(){
-		RNSecureStorage.get("biscoito")
-		.then((biscoito) => {
-			var fd = new FormData();
-			fd.append('cookie', biscoito);
-			fd.append('loja_id', this.props.route.params.loja_id);
-
-			fetch(DF_BASE_URL + 'api/loja-horario.php', {method : 'POST', body : fd})
-      		.then((response) => response.json())
-    		.then((obj) => {
-				if(obj.Status == "OK"){
-					this.setState({ horarios : obj.Result});
-				}else{
-					Alert.alert('Falha ao obter dados da loja');
-				}
-			})
-      		.catch((erro) => {
-				Alert.alert('Serviço Indisponível');
-			});
+		SuperHTTP(this.props.navigation, 'loja-horario.php', {LojaId: this.props.route.params.loja_id})
+		.then((ret) => {
+			this.setState({ horarios : ret});
 		})
-		.catch((erro) => { console.log(erro) });
+		.catch((err) => {
+			Alert.alert(err)
+		});
 	}
 
 	carregaavaliacoes(){
-		RNSecureStorage.get("biscoito")
-		.then((biscoito) => {
-			var fd = new FormData();
-			fd.append('cookie', biscoito);
-			fd.append('loja_id', this.props.route.params.loja_id);
-
-			fetch(DF_BASE_URL + 'api/loja-avaliacoes.php', {method : 'POST', body : fd})
-      		.then((response) => response.json())
-    		.then((obj) => {
-				if(obj.Status == "OK"){
-					this.setState({ avaliacoes : obj.Result});
-				}else{
-					Alert.alert('Falha ao obter dados da loja');
-				}
-			})
-      		.catch((erro) => {
-				Alert.alert('Serviço Indisponível');
-			});
+		SuperHTTP(this.props.navigation, 'loja-avaliacoes.php', {LojaId: this.props.route.params.loja_id})
+		.then((ret) => {
+			this.setState({ avaliacoes : ret});
 		})
-		.catch((erro) => { console.log(erro) });
+		.catch((err) => {
+			Alert.alert(err)
+		});
 	}
 
 	render(){

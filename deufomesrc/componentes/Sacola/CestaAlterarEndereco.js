@@ -73,7 +73,7 @@ export default class CestaAlterarEndereco extends Component {
       		.then((response) => response.json())
     		.then((obj) => {
 				if(obj.Status == "OK"){
-					this.props.navigation.navigate("Cesta", {rd_param : Math.random()});
+					this.props.navigation.push("Cesta");
 				}else{
 					Alert.alert('Falha ao obter dados da loja');
 				}

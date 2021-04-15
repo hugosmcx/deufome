@@ -21,7 +21,7 @@ export default class LoginEmail extends Component {
 				SuperHTTP(this.props.navigation, 'login-email.php', {Email : this.state.email})
 				.then((ret) => {
 					if(ret == "OK"){
-						this.props.navigation.navigate('LoginCodigo', {email : this.state.email, rd_param : Math.random()});
+						this.props.navigation.push('LoginCodigo', {email : this.state.email});
 						this.setState({estadoBotao : true});
 					}
 				})

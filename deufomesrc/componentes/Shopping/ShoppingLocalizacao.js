@@ -35,7 +35,7 @@ export default class ShoppingLocalizacao extends Component {
 	render(){
 		return (
 			<View style={this.estilos.principal}>
-				<TouchableOpacity style={this.estilos.botao} onPress={ () => this.props.navigation.navigate('AlterarLocalizacao') }>
+				<TouchableOpacity style={this.estilos.botao} onPress={ () => this.props.navigation.push('AlterarLocalizacao') }>
 					<View>
 						<Image style={this.estilos.imagem} source={ require('../../imagens/location.png') }/>
 					</View>

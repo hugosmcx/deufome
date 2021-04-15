@@ -13,7 +13,7 @@ export default class Shopping extends Component {
 	constructor(props){
 		super(props);
 
-		this.state = { cardapio : [], cidade : '' };
+		this.state = { cardapio : [], cidade : '', rd_param : 0.0};
 		this.carregamenu = this.carregamenu.bind(this);
 	}
 
@@ -67,7 +67,7 @@ export default class Shopping extends Component {
 						<ShoppingTela cardapio={this.state.cardapio} navigation={this.props.navigation}/>
 					</ScrollView>
 				</View>
-				<SacolaNot navigation={this.props.navigation}/>
+				<SacolaNot rd_param={Math.random()} navigation={this.props.navigation}/>
 				<ShoppingFooterMenu navigation={this.props.navigation}/>
 			</View>
 		);
